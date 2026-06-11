@@ -1,16 +1,25 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
+
 metadata:
-  name: sample-app
+  name: {{APP_ID}}
+  namespace: {{NAMESPACE}}
+
 spec:
+  ingressClassName: nginx
+
   rules:
-  - host: sample-app.local
+  - host: {{APP_ID}}.lab.local
+
     http:
       paths:
       - path: /
+
         pathType: Prefix
+
         backend:
           service:
-            name: sample-app
+            name: {{APP_ID}}
+
             port:
               number: 80
