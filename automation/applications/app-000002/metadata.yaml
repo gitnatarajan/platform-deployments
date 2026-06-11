@@ -1,0 +1,15 @@
+app_id: app-000002
+
+request_id: req02
+
+application_name: {{APPLICATION_NAME}}
+
+image: nginx
+
+requested_by: nat
+
+approved_by: {{APPROVED_BY}}
+
+environment: {{ENV}}
+
+status: active

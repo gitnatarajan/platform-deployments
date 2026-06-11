@@ -18,7 +18,7 @@ NAMESPACE=$(echo ${APP_ID} | tr '[:upper:]' '[:lower:]')
 for FILE in deployment service ingress namespace metadata kustomization
 do
 
-  cp templates/kubernetes/${FILE}.tpl \
+  cp ../templates/k8s/${FILE}.tpl \
      ${APP_DIR}/${FILE}.yaml
 
   sed -i "s/{{APP_ID}}/${APP_ID}/g" \
