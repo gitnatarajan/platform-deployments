@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+  name: app-000001
+  namespace: app-000001
+
+spec:
+  ingressClassName: nginx
+
+  rules:
+  - host: app-000001.lab.local
+
+    http:
+      paths:
+      - path: /
+
+        pathType: Prefix
+
+        backend:
+          service:
+            name: app-000001
+
+            port:
+              number: 80
