@@ -7,7 +7,7 @@ metadata:
 spec:
   generators:
     - git:
-        repoURL: https://github.com/YOURORG/gitops-platform.git
+        repoURL: https://github.com/gitnatarajan/platform-deployments.git
         revision: main
 
         directories:
@@ -21,7 +21,7 @@ spec:
       project: platform
 
       source:
-        repoURL: https://github.com/YOURORG/gitops-platform.git
+        repoURL: https://github.com/gitnatarajan/platform-deployments.git
         targetRevision: main
         path: '{{path}}'
 
