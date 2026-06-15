@@ -11,7 +11,7 @@ spec:
         revision: main
 
         directories:
-          - path: applications/*
+          - path: automation/applications/*
 
   template:
     metadata:
