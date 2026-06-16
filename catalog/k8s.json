@@ -6,7 +6,7 @@
   "approval_required": true,
   "fields": [
     {
-      "name": "application_name",
+      "name": "app_name",
       "display_name": "Application Name",
       "type": "text",
       "required": true
@@ -17,6 +17,12 @@
       "type": "text",
       "required": true,
       "placeholder": "nginx:latest"
+    },
+    {
+      "name": "namespace",
+      "display_name": "namespace",
+      "type": "text",
+      "required": true  
     },
     {
       "name": "replicas",

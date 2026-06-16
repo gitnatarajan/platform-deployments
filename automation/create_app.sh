@@ -32,7 +32,7 @@ echo "Creating application folder: $APP_DIR"
 cat > "${APP_DIR}/metadata.yaml" <<EOF
 app_id: ${APP_ID}
 request_id: ${REQUEST_ID}
-application_name: ${APP_NAME}
+app_name: ${APP_NAME}
 image: ${IMAGE}
 port: ${PORT}
 status: active
