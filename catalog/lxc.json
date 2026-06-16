@@ -1,0 +1,31 @@
+"lxc-container": {
+  service_id: "lxc-container",
+  display_name: "LXC Container",
+  fields: [
+    {
+      fieldLabel: "Hostname",
+      fieldType: "text",
+      requiredField: true
+    },
+    {
+      fieldLabel: "Template",
+      fieldType: "text",
+      requiredField: true
+    },
+    {
+      fieldLabel: "CPU",
+      fieldType: "number",
+      requiredField: true
+    },
+    {
+      fieldLabel: "Memory (MB)",
+      fieldType: "number",
+      requiredField: true
+    },
+    {
+      fieldLabel: "Disk (GB)",
+      fieldType: "number",
+      requiredField: true
+    }
+  ]
+}

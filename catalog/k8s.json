@@ -1,0 +1,46 @@
+{
+  "service_id": "k8s-app",
+  "display_name": "Kubernetes Application",
+  "description": "Deploy a k8s application using ArgoCD GitOps.",
+  "provisioner": "argocd",
+  "approval_required": true,
+  "fields": [
+    {
+      "name": "application_name",
+      "display_name": "Application Name",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "image",
+      "display_name": "Container Image",
+      "type": "text",
+      "required": true,
+      "placeholder": "nginx:latest"
+    },
+    {
+      "name": "replicas",
+      "display_name": "Replicas",
+      "type": "number",
+      "required": true,
+      "default": 1,
+      "min": 1,
+      "max": 3
+    },
+    {
+      "name": "port",
+      "display_name": "Application Port",
+      "type": "number",
+      "required": true,
+      "default": 80,
+      "min": 1,
+      "max": 65535
+    },
+    {
+      "name": "owner",
+      "display_name": "Application Owner",
+      "type": "text",
+      "required": true
+    }
+  ]
+}
