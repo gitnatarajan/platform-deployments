@@ -15,6 +15,12 @@ echo "Committing ${APP_ID}"
 
 git add applications/${APP_ID}
 
+if ! git diff --cached --quiet; then
+    git commit -m "Deploy ${APP_ID}"
+else
+    echo "No new changes detected for ${APP_ID}. Proceeding to push existing commits."
+fi
+
 git commit -m "Deploy ${APP_ID}"
 
 git -c http.sslVerify=false push origin main
