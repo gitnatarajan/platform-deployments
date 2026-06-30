@@ -6,7 +6,10 @@ REQUEST_ID=$1
 APP_NAME=$2
 IMAGE=$3
 PORT=$4
-
+NAMESPACE=$5
+REPLICAS=$6
+OWNER=$7
+SERVICE_ID=$8
 # Find repo root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
@@ -35,6 +38,10 @@ request_id: ${REQUEST_ID}
 application_name: ${APP_NAME}
 image: ${IMAGE}
 port: ${PORT}
+namespace: ${NAMESPACE}
+replicas: ${REPLICAS}
+owner: ${OWNER}
+service_id: ${SERVICE_ID}
 status: active
 EOF
 
