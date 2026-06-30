@@ -17,7 +17,7 @@ git add applications/${APP_ID}
 
 git commit -m "Deploy ${APP_ID}"
 
-git push origin main
+git -c http.sslVerify=false push origin main
 
 echo "Git push completed"
 
