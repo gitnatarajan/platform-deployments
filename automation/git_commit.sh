@@ -1,18 +1,24 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
 APP_ID=$1
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(dirname "$SCRIPT_DIR")"
+if [ -z "$APP_ID" ]; then
+    echo "Usage: git_commit.sh <APP_ID>"
+    exit 1
+fi
 
-cd "${REPO_ROOT}"
+REPO_ROOT=$(pwd)
+
+echo "Committing ${APP_ID}"
 
 git add applications/${APP_ID}
 
-git commit -m "Create ${APP_ID}" || true
+git commit -m "Deploy ${APP_ID}"
 
 git push origin main
 
-echo "Committed ${APP_ID}"
+echo "Git push completed"
+
+printf '{"app_id":"%s","status":"GIT_PUSHED"}\n' "$APP_ID"
