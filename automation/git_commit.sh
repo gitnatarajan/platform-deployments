@@ -11,13 +11,15 @@ fi
 
 echo "Committing ${APP_ID}..."
 
-# Stage application folder
+# Always sync with remote first
+git pull --rebase origin main
+
+# Stage files
 git add "applications/${APP_ID}"
 
-# Check whether anything is staged
+# Nothing to commit?
 if git diff --cached --quiet; then
     echo "No changes to commit."
-
     printf '{"app_id":"%s","status":"NO_CHANGES"}\n' "$APP_ID"
     exit 0
 fi
@@ -28,7 +30,4 @@ git commit -m "Deploy ${APP_ID}"
 # Push
 git push origin main
 
-echo "Git push completed."
-
-# Return JSON for n8n
 printf '{"app_id":"%s","status":"GIT_PUSHED"}\n' "$APP_ID"
