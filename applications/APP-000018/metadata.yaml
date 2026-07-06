@@ -1,0 +1,27 @@
+app_id: APP-000018
+
+request_id: REQ-00018
+
+app_name: 
+
+image: nginx:latest
+
+namespace: nattest
+
+replicas: 1
+
+port: 80
+
+requested_by: 
+
+approved_by: admin@local.com
+
+environment: {{ENV}}
+
+status: active
+
+created_at: 2026-07-01T18:17:21Z
+
+service_type: kubernetes
+
+provisioner: argocd
