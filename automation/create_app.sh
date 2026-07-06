@@ -20,11 +20,11 @@ APP_NAME=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]')
 LAST=$(find "${REPO_ROOT}/applications" -maxdepth 1 -type d -name "APP-*" | sort | tail -1)
 
 if [ -z "$LAST" ]; then
-    APP_ID="APP-000001"
+    APP_ID="app-000001"
 else
-    NUM=$(basename "$LAST" | sed 's/APP-//')
+    NUM=$(basename "$LAST" | sed 's/app-//')
     NEXT=$(printf "%06d" $((10#$NUM + 1)))
-    APP_ID="APP-$NEXT"
+    APP_ID="app-$NEXT"
 fi
 
 echo "Generated APP ID: $APP_ID"

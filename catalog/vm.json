@@ -1,0 +1,22 @@
+"microceph-vs3: {
+  service_id: "microceph-s3",
+  display_name: "S3 Bucket",
+  fields: [
+    {
+      fieldLabel: "Username",
+      fieldType: "text",
+      requiredField: true
+    },
+    {
+      fieldLabel: "user-email",
+      fieldType: "text",
+      requiredField: true
+    },
+    {
+      fieldLabel: "bucket size (GB)",
+      fieldType: "number",
+      requiredField: true
+    }
+  ]
+}
+

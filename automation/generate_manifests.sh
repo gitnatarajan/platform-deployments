@@ -3,6 +3,7 @@
 set -e
 
 APP_ID=$1
+APP_ID=$(echo "$APP_ID" | tr '[:upper:]' '[:lower:]')
 
 if [ -z "$APP_ID" ]; then
     echo "Usage: $0 <APP_ID>"

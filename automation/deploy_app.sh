@@ -3,10 +3,10 @@
 set -e
 
 APP=$1
+APP=$(echo "$APP" | tr '[:upper:]' '[:lower:]')
 IMAGE=$2
 PORT=$3
 NAMESPACE=$4
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 
