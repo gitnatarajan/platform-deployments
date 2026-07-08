@@ -10,7 +10,7 @@ REPLICAS="$6"
 OWNER="$7"
 SERVICE_ID="$8"
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="/git/platform-deployments"
 
 APP_NAME=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]')
@@ -27,14 +27,14 @@ echo "Generating application directory: ${APP_DIR}" >&2
 
 mkdir -p "${APP_DIR}"
 # deployment.yaml
-sed -e "s|{{APP_NAME}}|${APP_NAME}|g" -e "s|{{IMAGE}}|${IMAGE}|g" -e "s|{{PORT}}|${PORT}|g" -e "s|{{NAMESPACE}}|${NAMESPACE}|g" -e "s|{{REPLICAS}}|${REPLICAS}|g" \
+sed -e "s|{{APP_ID}}|${APP_ID}|g" -e "s|{{IMAGE}}|${IMAGE}|g" -e "s|{{PORT}}|${PORT}|g" -e "s|{{NAMESPACE}}|${NAMESPACE}|g" -e "s|{{REPLICAS}}|${REPLICAS}|g" \
 "${REPO_ROOT}/templates/k8s/deployment.tpl" > "${APP_DIR}/deployment.yaml"
 
 # service.yaml
-sed -e "s|{{APP_NAME}}|${APP_NAME}|g" -e "s|{{PORT}}|${PORT}|g" -e "s|{{NAMESPACE}}|${NAMESPACE}|g" "${REPO_ROOT}/templates/k8s/service.tpl" > "${APP_DIR}/service.yaml"
+sed -e "s|{{APP_ID}}|${APP_ID}|g" -e "s|{{PORT}}|${PORT}|g" -e "s|{{NAMESPACE}}|${NAMESPACE}|g" "${REPO_ROOT}/templates/k8s/service.tpl" > "${APP_DIR}/service.yaml"
 
 # ingress.yaml
-sed -e "s|{{APP_NAME}}|${APP_NAME}|g" -e "s|{{NAMESPACE}}|${NAMESPACE}|g" "${REPO_ROOT}/templates/k8s/ingress.tpl" > "${APP_DIR}/ingress.yaml"
+sed -e "s|{{APP_ID}}|${APPAPP_ID_NAME}|g" -e "s|{{NAMESPACE}}|${NAMESPACE}|g" "${REPO_ROOT}/templates/k8s/ingress.tpl" > "${APP_DIR}/ingress.yaml"
 
 # namespace.yaml
 sed -e "s|{{NAMESPACE}}|${NAMESPACE}|g" "${REPO_ROOT}/templates/k8s/namespace.tpl" > "${APP_DIR}/namespace.yaml"
