@@ -29,7 +29,7 @@ if [ ! -d "applications/${APP_ID}" ]; then
 fi
 
 # Stage only this application's files
-git add "applications/${APP_ID}"
+git -c http.sslVerify=false add "applications/${APP_ID}"
 
 # Check if anything changed
 if git diff --cached --quiet; then
@@ -40,10 +40,10 @@ if git diff --cached --quiet; then
 fi
 
 # Commit
-git commit -m "Deploy ${APP_ID}"
+git -c http.sslVerify=false commit -m "Deploy ${APP_ID}"
 
 # Push
-git push origin main
+git -c http.sslVerify=false push origin main
 
 echo "Successfully pushed ${APP_ID}"
 
