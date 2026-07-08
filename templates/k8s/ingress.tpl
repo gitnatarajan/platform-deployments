@@ -6,7 +6,7 @@ metadata:
   namespace: {{NAMESPACE}}
 
 spec:
-  ingressClassName: nginx
+  ingressClassName: traefik
 
   rules:
   - host: {{APP_ID}}.lab.local

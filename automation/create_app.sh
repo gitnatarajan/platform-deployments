@@ -13,7 +13,7 @@ SERVICE_ID="$8"
 # SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="/git/platform-deployments"
 
-APP_NAME=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]')
+APP_NAME=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]'|sed 's/ //g')
 NAMESPACE=$(echo "$NAMESPACE" | tr '[:upper:]' '[:lower:]')
 
 # Generate APP ID
