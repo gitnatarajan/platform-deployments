@@ -1,15 +1,15 @@
 #!/bin/sh
 
 set -e
+
 echo "ARG COUNT=$#"
-echo "1=[$1]"
-echo "2=[$2]"
-echo "3=[$3]"
-echo "4=[$4]"
-echo "5=[$5]"
-echo "6=[$6]"
-echo "7=[$7]"
-echo "8=[$8]"
+
+count=1
+for arg in "$@"
+do
+    echo "ARG$count=[$arg]"
+    count=`expr $count + 1`
+done
 
 REQUEST_ID="$1"
 APP_NAME="$2"
