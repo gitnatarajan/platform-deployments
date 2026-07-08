@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+  name: nginx-6149365
+  namespace: testingnginx
+
+spec:
+  ingressClassName: traefik
+
+  rules:
+  - host: nginx-6149365.lab.local
+
+    http:
+      paths:
+      - path: /
+
+        pathType: Prefix
+
+        backend:
+          service:
+            name: nginx-6149365
+
+            port:
+              number: 80
