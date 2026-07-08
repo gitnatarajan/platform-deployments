@@ -2,14 +2,14 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 
 metadata:
-  name: {{APP_ID}}
-  namespace: 
+  name: 
+  namespace: scratch
 
 spec:
   ingressClassName: nginx
 
   rules:
-  - host: {{APP_ID}}.lab.local
+  - host: .lab.local
 
     http:
       paths:
@@ -19,7 +19,7 @@ spec:
 
         backend:
           service:
-            name: {{APP_ID}}
+            name: 
 
             port:
               number: 80

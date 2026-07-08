@@ -2,15 +2,15 @@ apiVersion: v1
 kind: Service
 
 metadata:
-  name: {{APP_ID}}
-  namespace: 
+  name: scratch -4364413
+  namespace: scratch
 
 spec:
   selector:
-    app: {{APP_ID}}
+    app: scratch -4364413
 
   ports:
   - port: 80
-    targetPort: 
+    targetPort: 80
 
   type: ClusterIP
