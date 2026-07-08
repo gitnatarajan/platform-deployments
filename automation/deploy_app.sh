@@ -19,8 +19,7 @@ echo "========================================="
 
 # Move to repository
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPO_ROOT="$(dirname "$SCRIPT_DIR")"
-
+REPO_ROOT="/git/platform-deployments"
 cd "$REPO_ROOT"
 
 echo "Synchronizing Git repository..."
