@@ -1,0 +1,11 @@
+request_id: REQ-1783535799822
+app_id: scratch-5799822
+application_name: scratch
+namespace: scratch
+image: scratch:latest
+replicas: 1
+port: 80
+owner: nat
+service_id: k8s-app
+status: CREATED
+created_at: 2026-07-08T18:37:18Z
