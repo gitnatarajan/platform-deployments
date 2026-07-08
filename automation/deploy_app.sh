@@ -1,6 +1,15 @@
 #!/bin/sh
 
 set -e
+echo "ARG COUNT=$#"
+echo "1=[$1]"
+echo "2=[$2]"
+echo "3=[$3]"
+echo "4=[$4]"
+echo "5=[$5]"
+echo "6=[$6]"
+echo "7=[$7]"
+echo "8=[$8]"
 
 REQUEST_ID="$1"
 APP_NAME="$2"
@@ -17,8 +26,8 @@ echo "Request ID : $REQUEST_ID"
 echo "Application: $APP_NAME"
 echo "========================================="
 
-# Move to repository
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# # Move to repository
+# SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="/git/platform-deployments"
 cd "$REPO_ROOT"
 
