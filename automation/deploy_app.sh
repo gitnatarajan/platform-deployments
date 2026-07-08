@@ -1,4 +1,5 @@
 #!/bin/sh
+
 set -e
 
 REQUEST_ID="$1"
@@ -10,57 +11,38 @@ REPLICAS="$6"
 OWNER="$7"
 SERVICE_ID="$8"
 
+echo "========================================="
+echo "Starting deployment workflow"
+echo "Request ID : $REQUEST_ID"
+echo "Application: $APP_NAME"
+echo "========================================="
+
+# Move to repository
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 
-APP_NAME=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]')
-NAMESPACE=$(echo "$NAMESPACE" | tr '[:upper:]' '[:lower:]')
+cd "$REPO_ROOT"
 
-# Generate APP ID
-REQ_NUM=$(echo "$REQUEST_ID" | sed 's/^REQ-//')
+echo "Synchronizing Git repository..."
 
-# Last 7 digits of request id
-SHORT_REQ=$(echo "$REQ_NUM" | tail -c 8)
-APP_ID="${APP_NAME}-${SHORT_REQ}"
-APP_DIR="${REPO_ROOT}/applications/${APP_ID}"
-echo "Generating application directory: ${APP_DIR}" >&2
+git -c http.sslVerify=false fetch origin
+git -c http.sslVerify=false reset --hard origin/main
+git -c http.sslVerify=false clean -fd
 
-mkdir -p "${APP_DIR}"
-# deployment.yaml
-sed -e "s|{{APP_NAME}}|${APP_NAME}|g" -e "s|{{IMAGE}}|${IMAGE}|g" -e "s|{{PORT}}|${PORT}|g" -e "s|{{NAMESPACE}}|${NAMESPACE}|g" -e "s|{{REPLICAS}}|${REPLICAS}|g" \
-"${REPO_ROOT}/templates/k8s/deployment.tpl" > "${APP_DIR}/deployment.yaml"
+echo "Generating application manifests..."
+echo "$REQUEST_ID $APP_NAME $IMAGE $PORT $NAMESPACE $REPLICAS $OWNER $SERVICE_ID" 
 
-# service.yaml
-sed -e "s|{{APP_NAME}}|${APP_NAME}|g" -e "s|{{PORT}}|${PORT}|g" -e "s|{{NAMESPACE}}|${NAMESPACE}|g" "${REPO_ROOT}/templates/k8s/service.tpl" > "${APP_DIR}/service.yaml"
+APP_ID=$(
+sh automation/create_app.sh "$REQUEST_ID" "$APP_NAME" "$IMAGE" "$PORT" "$NAMESPACE" "$REPLICAS" "$OWNER" "$SERVICE_ID" | tail -1
+)
 
-# ingress.yaml
-sed -e "s|{{APP_NAME}}|${APP_NAME}|g" -e "s|{{NAMESPACE}}|${NAMESPACE}|g" "${REPO_ROOT}/templates/k8s/ingress.tpl" > "${APP_DIR}/ingress.yaml"
+echo "Generated APP_ID=$APP_ID"
 
-# namespace.yaml
-sed -e "s|{{NAMESPACE}}|${NAMESPACE}|g" "${REPO_ROOT}/templates/k8s/namespace.tpl" > "${APP_DIR}/namespace.yaml"
+echo "Committing manifests..."
 
-# kustomization.yaml
-cp "${REPO_ROOT}/templates/k8s/kustomization.tpl" "${APP_DIR}/kustomization.yaml"
+sh automation/git_commit.sh "$APP_ID"
 
-# metadata.yaml
-cat > "${APP_DIR}/metadata.yaml" <<EOF
-request_id: ${REQUEST_ID}
-app_id: ${APP_ID}
-application_name: ${APP_NAME}
-namespace: ${NAMESPACE}
-image: ${IMAGE}
-replicas: ${REPLICAS}
-port: ${PORT}
-owner: ${OWNER}
-service_id: ${SERVICE_ID}
-status: CREATED
-created_at: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
-EOF
+echo "Deployment workflow completed."
 
-echo "Application manifests created successfully." >&2
-
-
-# Return APP_ID
-
-
-echo "${APP_ID}"
+# Return APP_ID to n8n
+echo "$APP_ID"
