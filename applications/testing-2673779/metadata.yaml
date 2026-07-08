@@ -1,0 +1,11 @@
+request_id: REQ-1783532673779
+app_id: testing-2673779
+application_name: testing
+namespace: testing
+image: alpine:latest
+replicas: 1
+port: 80
+owner: nat
+service_id: k8s-app
+status: CREATED
+created_at: 2026-07-08T17:49:43Z

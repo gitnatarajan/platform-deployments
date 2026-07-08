@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: {{APP_ID}}
+  namespace: testing
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: {{APP_ID}}
+
+  template:
+    metadata:
+      labels:
+        app: {{APP_ID}}
+
+    spec:
+      containers:
+      - name: {{APP_ID}}
+        image: alpine:latest
+
+        ports:
+        - containerPort: 80
