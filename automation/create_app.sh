@@ -34,7 +34,7 @@ sed -e "s|{{APP_ID}}|${APP_ID}|g" -e "s|{{IMAGE}}|${IMAGE}|g" -e "s|{{PORT}}|${P
 sed -e "s|{{APP_ID}}|${APP_ID}|g" -e "s|{{PORT}}|${PORT}|g" -e "s|{{NAMESPACE}}|${NAMESPACE}|g" "${REPO_ROOT}/templates/k8s/service.tpl" > "${APP_DIR}/service.yaml"
 
 # ingress.yaml
-sed -e "s|{{APP_ID}}|${APPAPP_ID_NAME}|g" -e "s|{{NAMESPACE}}|${NAMESPACE}|g" "${REPO_ROOT}/templates/k8s/ingress.tpl" > "${APP_DIR}/ingress.yaml"
+sed -e "s|{{APP_ID}}|${APP_ID}|g" -e "s|{{NAMESPACE}}|${NAMESPACE}|g" "${REPO_ROOT}/templates/k8s/ingress.tpl" > "${APP_DIR}/ingress.yaml"
 
 # namespace.yaml
 sed -e "s|{{NAMESPACE}}|${NAMESPACE}|g" "${REPO_ROOT}/templates/k8s/namespace.tpl" > "${APP_DIR}/namespace.yaml"
