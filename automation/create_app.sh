@@ -17,7 +17,7 @@ REPO_ROOT=$(dirname "$SCRIPT_DIR")
 
 APP_NAME=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]')
 
-LAST=$(find "${REPO_ROOT}/applications" -maxdepth 1 -type d -name "APP-*" | sort | tail -1)
+LAST=$(find "${REPO_ROOT}/applications" -maxdepth 1 -type d -name "app-*" | sort | tail -1)
 
 if [ -z "$LAST" ]; then
     APP_ID="app-000001"
