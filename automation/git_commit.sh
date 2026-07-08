@@ -18,20 +18,22 @@ cd /git/platform-deployments || {
 
 echo "====================================="
 echo "Git Commit Script"
-echo "APP_ID : ${APP_ID}"
+echo "APP_ID     : ${APP_ID}"
 echo "Repository : $(pwd)"
 echo "====================================="
 
 # Verify application directory exists
 if [ ! -d "applications/${APP_ID}" ]; then
-    echo "Directory applications/${APP_ID} does not exist"
+    echo "ERROR: applications/${APP_ID} does not exist"
     exit 1
 fi
 
-# Stage only this application's files
+echo "Staging files..."
+
+# Stage only this application's manifests
 git -c http.sslVerify=false add "applications/${APP_ID}"
 
-# Check if anything changed
+# Check whether anything was staged
 if git diff --cached --quiet; then
     echo "No changes detected."
 
@@ -39,12 +41,16 @@ if git diff --cached --quiet; then
     exit 0
 fi
 
-# Commit
+echo "Creating commit..."
+
 git -c http.sslVerify=false commit -m "Deploy ${APP_ID}"
 
-# Push
+echo "Pushing to GitHub..."
+
 git -c http.sslVerify=false push origin main
 
+echo "====================================="
 echo "Successfully pushed ${APP_ID}"
+echo "====================================="
 
 printf '{"app_id":"%s","status":"GIT_PUSHED"}\n' "$APP_ID"

@@ -1,55 +1,66 @@
-#!/bin/bash
-
+#!/bin/sh
 set -e
 
-APP=$1
-APP=$(echo "$APP" | tr '[:upper:]' '[:lower:]')
-IMAGE=$2
-PORT=$3
-NAMESPACE=$4
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REQUEST_ID="$1"
+APP_NAME="$2"
+IMAGE="$3"
+PORT="$4"
+NAMESPACE="$5"
+REPLICAS="$6"
+OWNER="$7"
+SERVICE_ID="$8"
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 
-# Kubernetes namespace must be lowercase
+APP_NAME=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]')
 NAMESPACE=$(echo "$NAMESPACE" | tr '[:upper:]' '[:lower:]')
 
-APP_DIR="${REPO_ROOT}/applications/${APP}"
+# Generate APP ID
+REQ_NUM=$(echo "$REQUEST_ID" | sed 's/^REQ-//')
 
-mkdir -p "$APP_DIR"
+# Last 7 digits of request id
+SHORT_REQ=$(echo "$REQ_NUM" | tail -c 8)
+APP_ID="${APP_NAME}-${SHORT_REQ}"
+APP_DIR="${REPO_ROOT}/applications/${APP_ID}"
+echo "Generating application directory: ${APP_DIR}" >&2
 
-sed "
-s/{{APP_NAME}}/$APP/g;
-s#{{IMAGE}}#$IMAGE#g;
-s/{{PORT}}/$PORT/g;
-s/{{NAMESPACE}}/$NAMESPACE/g
-" "${REPO_ROOT}/templates/k8s/deployment.tpl" \
-> "${APP_DIR}/deployment.yaml"
+mkdir -p "${APP_DIR}"
+# deployment.yaml
+sed -e "s|{{APP_NAME}}|${APP_NAME}|g" -e "s|{{IMAGE}}|${IMAGE}|g" -e "s|{{PORT}}|${PORT}|g" -e "s|{{NAMESPACE}}|${NAMESPACE}|g" -e "s|{{REPLICAS}}|${REPLICAS}|g" \
+"${REPO_ROOT}/templates/k8s/deployment.tpl" > "${APP_DIR}/deployment.yaml"
 
-sed "
-s/{{APP_NAME}}/$APP/g;
-s/{{PORT}}/$PORT/g;
-s/{{NAMESPACE}}/$NAMESPACE/g
-" "${REPO_ROOT}/templates/k8s/service.tpl" \
-> "${APP_DIR}/service.yaml"
+# service.yaml
+sed -e "s|{{APP_NAME}}|${APP_NAME}|g" -e "s|{{PORT}}|${PORT}|g" -e "s|{{NAMESPACE}}|${NAMESPACE}|g" "${REPO_ROOT}/templates/k8s/service.tpl" > "${APP_DIR}/service.yaml"
 
-sed "
-s/{{APP_NAME}}/$APP/g;
-s/{{NAMESPACE}}/$NAMESPACE/g
-" "${REPO_ROOT}/templates/k8s/ingress.tpl" \
-> "${APP_DIR}/ingress.yaml"
+# ingress.yaml
+sed -e "s|{{APP_NAME}}|${APP_NAME}|g" -e "s|{{NAMESPACE}}|${NAMESPACE}|g" "${REPO_ROOT}/templates/k8s/ingress.tpl" > "${APP_DIR}/ingress.yaml"
 
-sed "
-s/{{NAMESPACE}}/$NAMESPACE/g
-" "${REPO_ROOT}/templates/k8s/namespace.tpl" \
-> "${APP_DIR}/namespace.yaml"
+# namespace.yaml
+sed -e "s|{{NAMESPACE}}|${NAMESPACE}|g" "${REPO_ROOT}/templates/k8s/namespace.tpl" > "${APP_DIR}/namespace.yaml"
 
-cd "${REPO_ROOT}"
+# kustomization.yaml
+cp "${REPO_ROOT}/templates/k8s/kustomization.tpl" "${APP_DIR}/kustomization.yaml"
 
-git add .
+# metadata.yaml
+cat > "${APP_DIR}/metadata.yaml" <<EOF
+request_id: ${REQUEST_ID}
+app_id: ${APP_ID}
+application_name: ${APP_NAME}
+namespace: ${NAMESPACE}
+image: ${IMAGE}
+replicas: ${REPLICAS}
+port: ${PORT}
+owner: ${OWNER}
+service_id: ${SERVICE_ID}
+status: CREATED
+created_at: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
+EOF
 
-git commit -m "deploy ${APP}" || true
+echo "Application manifests created successfully." >&2
 
-git push origin main
 
-echo "Deployment manifests created for ${APP}"
-echo "Namespace: ${NAMESPACE}"
+# Return APP_ID
+
+
+echo "${APP_ID}"
