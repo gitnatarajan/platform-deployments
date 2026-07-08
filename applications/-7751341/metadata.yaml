@@ -1,0 +1,11 @@
+request_id: REQ-1783527751341
+app_id: -7751341
+application_name: 
+namespace: 
+image: 
+replicas: 
+port: 
+owner: 
+service_id: k8s-app
+status: CREATED
+created_at: 2026-07-08T16:23:19Z
