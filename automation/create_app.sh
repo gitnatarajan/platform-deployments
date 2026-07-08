@@ -1,5 +1,4 @@
 #!/bin/sh
-
 set -e
 
 REQUEST_ID=$1
@@ -11,92 +10,79 @@ REPLICAS=$6
 OWNER=$7
 SERVICE_ID=$8
 
-# Find repo root
-SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-REPO_ROOT=$(dirname "$SCRIPT_DIR")
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 
 APP_NAME=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]')
+NAMESPACE=$(echo "$NAMESPACE" | tr '[:upper:]' '[:lower:]')
 
-LAST=$(find "${REPO_ROOT}/applications" -maxdepth 1 -type d -name "app-*" | sort | tail -1)
+# Generate APP_ID from Application Name + Request ID
+REQ_NUM=$(echo "$REQUEST_ID" | sed 's/REQ-//')
+SHORT_REQ=$(echo "$REQ_NUM" | tail -c 8)
 
-if [ -z "$LAST" ]; then
-    APP_ID="app-000001"
-else
-    NUM=$(basename "$LAST" | sed 's/app-//')
-    NEXT=$(printf "%06d" $((10#$NUM + 1)))
-    APP_ID="app-$NEXT"
-fi
+APP_ID="${APP_NAME}-${SHORT_REQ}"
 
-echo "Generated APP ID: $APP_ID"
+echo "Generated APP ID: ${APP_ID}"
 
+# Create application directory
 APP_DIR="${REPO_ROOT}/applications/${APP_ID}"
+mkdir -p "${APP_DIR}"
 
-mkdir -p "$APP_DIR"
+# deployment.yaml
+sed \
+-e "s|{{APP_NAME}}|${APP_NAME}|g" \
+-e "s|{{IMAGE}}|${IMAGE}|g" \
+-e "s|{{PORT}}|${PORT}|g" \
+-e "s|{{NAMESPACE}}|${NAMESPACE}|g" \
+-e "s|{{REPLICAS}}|${REPLICAS}|g" \
+"${REPO_ROOT}/templates/k8s/deployment.tpl" \
+> "${APP_DIR}/deployment.yaml"
 
+
+# service.yaml
+sed \
+-e "s|{{APP_NAME}}|${APP_NAME}|g" \
+-e "s|{{PORT}}|${PORT}|g" \
+-e "s|{{NAMESPACE}}|${NAMESPACE}|g" \
+"${REPO_ROOT}/templates/k8s/service.tpl" \
+> "${APP_DIR}/service.yaml"
+
+
+# ingress.yaml
+sed \
+-e "s|{{APP_NAME}}|${APP_NAME}|g" \
+-e "s|{{NAMESPACE}}|${NAMESPACE}|g" \
+"${REPO_ROOT}/templates/k8s/ingress.tpl" \
+> "${APP_DIR}/ingress.yaml"
+
+
+# namespace.yaml
+sed \
+-e "s|{{NAMESPACE}}|${NAMESPACE}|g" \
+"${REPO_ROOT}/templates/k8s/namespace.tpl" \
+> "${APP_DIR}/namespace.yaml"
+
+
+# kustomization.yaml
+cp "${REPO_ROOT}/templates/k8s/kustomization.tpl" \
+"${APP_DIR}/kustomization.yaml"
+
+
+# metadata.yaml
 cat > "${APP_DIR}/metadata.yaml" <<EOF
-app_id: ${APP_ID}
 request_id: ${REQUEST_ID}
+app_id: ${APP_ID}
 application_name: ${APP_NAME}
-image: ${IMAGE}
-port: ${PORT}
 namespace: ${NAMESPACE}
+image: ${IMAGE}
 replicas: ${REPLICAS}
+port: ${PORT}
 owner: ${OWNER}
 service_id: ${SERVICE_ID}
-status: active
+status: CREATED
+created_at: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
 EOF
 
 echo "Application folder created successfully"
+
 echo "${APP_ID}"
-
-
-
-# #!/bin/bash
-
-# set -e
-
-# REQUEST_ID=$1
-# APP_NAME=$2
-# IMAGE=$3
-# PORT=$4
-# NAMESPACE=$5
-# REPLICAS=$6
-# OWNER=$7
-# SERVICE_ID=$8
-# # Find repo root
-# SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# REPO_ROOT="$(dirname "$SCRIPT_DIR")"
-
-# APP_NAME=$(echo "$APP_NAME" | tr '[:upper:]' '[:lower:]')
-
-# LAST=$(find "${REPO_ROOT}/applications" -maxdepth 1 -type d -name "APP-*" | sort | tail -1)
-
-# if [ -z "$LAST" ]; then
-#     APP_ID="APP-000001"
-# else
-#     NUM=$(basename "$LAST" | sed 's/APP-//')
-#     NEXT=$(printf "%06d" $((10#$NUM + 1)))
-#     APP_ID="APP-$NEXT"
-# fi
-
-# echo "Generated APP ID: $APP_ID"
-
-# APP_DIR="${REPO_ROOT}/applications/${APP_ID}"
-
-# mkdir -p "$APP_DIR"
-
-# cat > "${APP_DIR}/metadata.yaml" <<EOF
-# app_id: ${APP_ID}
-# request_id: ${REQUEST_ID}
-# application_name: ${APP_NAME}
-# image: ${IMAGE}
-# port: ${PORT}
-# namespace: ${NAMESPACE}
-# replicas: ${REPLICAS}
-# owner: ${OWNER}
-# service_id: ${SERVICE_ID}
-# status: active
-# EOF
-
-# echo "Application folder created successfully"
-# echo "${APP_ID}"
