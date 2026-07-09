@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: scratch-5111605
+  namespace: scratch
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: scratch-5111605
+
+  template:
+    metadata:
+      labels:
+        app: scratch-5111605
+
+    spec:
+      containers:
+      - name: scratch-5111605
+        image: scratch:latest
+
+        ports:
+        - containerPort: 80

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: scratch-5111605
+  namespace: scratch
+
+spec:
+  selector:
+    app: scratch-5111605
+
+  ports:
+  - port: 80
+    targetPort: 80
+
+  type: ClusterIP
