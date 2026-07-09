@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: alpine-4447166
+  namespace: alpine
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: alpine-4447166
+
+  template:
+    metadata:
+      labels:
+        app: alpine-4447166
+
+    spec:
+      containers:
+      - name: alpine-4447166
+        image: alpine:latest
+
+        ports:
+        - containerPort: 80

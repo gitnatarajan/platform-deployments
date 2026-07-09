@@ -1,0 +1,11 @@
+request_id: REQ-1783614447166
+app_id: alpine-4447166
+application_name: alpine
+namespace: alpine
+image: alpine:latest
+replicas: 1
+port: 80
+owner: nat
+service_id: k8s-app
+status: CREATED
+created_at: 2026-07-09T16:27:58Z
