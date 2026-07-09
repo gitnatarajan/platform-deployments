@@ -1,0 +1,11 @@
+request_id: REQ-1783616379439
+app_id: nginx-6379439
+application_name: nginx
+namespace: nginxnat
+image: nginx:latest
+replicas: 1
+port: 80
+owner: nat
+service_id: k8s-app
+status: CREATED
+created_at: 2026-07-09T17:07:44Z
