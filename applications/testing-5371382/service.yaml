@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: testing-5371382
+  namespace: alpine
+
+spec:
+  selector:
+    app: testing-5371382
+
+  ports:
+  - port: 80
+    targetPort: 80
+
+  type: ClusterIP
