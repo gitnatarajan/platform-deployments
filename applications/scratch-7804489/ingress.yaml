@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+metadata:
+  name: scratch-7804489
+  namespace: scratch
+
+spec:
+  ingressClassName: traefik
+
+  rules:
+  - host: scratch-7804489.lab.local
+
+    http:
+      paths:
+      - path: /
+
+        pathType: Prefix
+
+        backend:
+          service:
+            name: scratch-7804489
+
+            port:
+              number: 80
