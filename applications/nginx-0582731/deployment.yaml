@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: nginx-0582731
+  namespace: testing
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: nginx-0582731
+
+  template:
+    metadata:
+      labels:
+        app: nginx-0582731
+
+    spec:
+      containers:
+      - name: nginx-0582731
+        image: nginx:latest
+
+        ports:
+        - containerPort: 80

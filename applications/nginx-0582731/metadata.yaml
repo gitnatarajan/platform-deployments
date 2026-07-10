@@ -1,0 +1,11 @@
+request_id: REQ-1783670582731
+app_id: nginx-0582731
+application_name: nginx
+namespace: testing
+image: nginx:latest
+replicas: 1
+port: 80
+owner: nattest
+service_id: k8s-app
+status: CREATED
+created_at: 2026-07-10T08:03:23Z

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: nginx-0582731
+  namespace: testing
+
+spec:
+  selector:
+    app: nginx-0582731
+
+  ports:
+  - port: 80
+    targetPort: 80
+
+  type: ClusterIP
